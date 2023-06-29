@@ -1,0 +1,15 @@
+# Virtual environment
+/env
+# Env variables
+.env
+# Database
+*.sqlite
+# PyCache
+__pycache__
+
+.ipynb_checkpoints
+
+.hypothesis
+*.ipynb
+
+*.db
