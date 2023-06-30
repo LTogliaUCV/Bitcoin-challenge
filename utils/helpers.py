@@ -20,4 +20,4 @@ class RollingMeanCalculator:
         # Aggregate the data by the window and calculate the mean value of 'value'
         result = window['price'].mean()
 
-        return result
+        return  result

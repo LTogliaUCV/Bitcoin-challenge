@@ -32,3 +32,27 @@ class BitcoinDatabase:
         df = pd.read_sql(select_query, conn)
         conn.close()
         return df
+    
+
+class RollingMeanDatabase:
+    def __init__(self, db_name, table_name):
+        self.db_name = db_name
+        self.table_name = table_name
+
+    def insert_rolling_mean(self, df):
+        # Convert the 'date' column to datetime type
+     
+
+        # Open a connection to the database
+        conn = sqlite3.connect(self.db_name)
+
+        # Create the table if it doesn't exist
+        conn.execute(f'''CREATE TABLE IF NOT EXISTS {self.table_name}
+                        (date TEXT ,
+                        mean_value_price REAL);''')
+
+        # Insert the results into the table
+        df.to_sql(self.table_name, conn, if_exists='append', index=False)
+
+        # Close the connection to the database
+        conn.close()
