@@ -19,7 +19,7 @@ The scripts allows you to update Bitcoin prices in a SQLite3 database using the 
 ```python
 python load_data_btc.py
 python load_rolling_btc.py
-
+```
 
 
 ## Contributing
