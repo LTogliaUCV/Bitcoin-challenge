@@ -4,23 +4,23 @@ Develop an automated and scalable process to obtain the average of each 5
 days (moving average) of the price of bitcoin in the first quarter of 2022.
 
 
-## Database
+# Updating Bitcoin Prices in a Database
 
+The scripts allows you to update Bitcoin prices in a SQLite3 database using the CoinGecko API.
+
+## Requisitos
+
+- Python 3.x
+- Instalar requirements.txt
+- Un url para el api de  `CoinGeckoAPI`
 
 ## Usage
 
 ```python
-import foobar
+python load_data_btc.py
+python load_rolling_btc.py
 
-# returns 'words'
-foobar.pluralize('word')
 
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-```
 
 ## Contributing
 
