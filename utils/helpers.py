@@ -1,4 +1,9 @@
+import os
 import pandas as pd
+from dotenv import load_dotenv
+
+load_dotenv()
+window_value = os.getenv("WINDOW_SIZE")
 
 class RollingMeanCalculator:
     def __init__(self, df):
@@ -14,8 +19,8 @@ class RollingMeanCalculator:
         # Sort the DataFrame by the index in ascending order
         self.df.sort_index(inplace=True)
 
-        # Create a rolling window with a window size of 5 days
-        window = self.df.rolling(window='5D')
+        # Create a rolling window with a window size of N days
+        window = self.df.rolling(window=window_value)
 
         # Aggregate the data by the window and calculate the mean value of 'value'
         result = window['price'].mean()

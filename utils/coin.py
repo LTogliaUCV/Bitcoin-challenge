@@ -1,11 +1,16 @@
+import os
 import requests
+from dotenv import load_dotenv
 from datetime import datetime
+
+load_dotenv()
+base_url = os.getenv('BASE_URL')
 
 class CoinGeckoAPI:
     
 
     def get_market_chart_data(self,coin, vs_currency, from_timestamp, to_timestamp, precision):
-        url = f"https://api.coingecko.com/api/v3/coins/{coin}/market_chart/range?vs_currency={vs_currency}&from={from_timestamp}&to={to_timestamp}&precision={precision}"
+        url = f"{base_url}/{coin}/market_chart/range?vs_currency={vs_currency}&from={from_timestamp}&to={to_timestamp}&precision={precision}"
         
         print(url)
         headers = {}
@@ -27,7 +32,7 @@ class CoinGeckoAPI:
 
    
     def get_coin_list(self):
-        url = "https://api.coingecko.com/api/v3/coins/list"
+        url = f"{base_url}/list"
         headers = {}
         response = requests.get(url, headers=headers)
 

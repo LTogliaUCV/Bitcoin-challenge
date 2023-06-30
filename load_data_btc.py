@@ -1,66 +1,73 @@
-import pandas as pd  # Importa la librería pandas para trabajar con dataframes
-from utils.coin import CoinGeckoAPI  # Importa la clase CoinGeckoAPI de un módulo personalizado
-from utils.manager import BitcoinDatabase  # Importa la clase BitcoinDatabase de un módulo personalizado
+import os
+import pandas as pd
+from dotenv import load_dotenv
+from utils.coin import CoinGeckoAPI  
+from utils.manager import BitcoinDatabase  
+
+load_dotenv()
+
+db_name = os.getenv("BTC_DB")
+table_btc_price_history = os.getenv("BTC_PRICE_TABLE")
+table_rolling_price_history = os.getenv("ROLLING_PRICE_TABLE")
+bitcoin_name = os.getenv("COIN_BTC_NAME")
+vs_currency= os.getenv("VS_CURRENCY")
+from_timestamp = os.getenv("FROM_DATE")
+to_timestamp = os.getenv("TO_DATE")
+precision =os.getenv("PRECISION")
 
 
 def main():
-    # Crea una instancia de la clase CoinGeckoAPI
+    # Init  the CoinGeckoAPI class
     cg_api = CoinGeckoAPI()
 
-    # Obtiene una lista de todas las criptomonedas disponibles en CoinGecko
+    # Get all the coint list from CoinGecko
     coin_list = cg_api.get_coin_list()
-
-    # Selecciona la criptomoneda a filtrar (en este caso Bitcoin)
-    coint_to_filter = 'Bitcoin'
-
-    # Filtra la lista de criptomonedas para obtener un diccionario de la criptomoneda seleccionada
+ 
+    # Choose the coin to filter (our case bitcoin)
+    coint_to_filter = bitcoin_name
+ 
+    # Filter list of dict from the api response
     bitcoint_dic = [d for d in coin_list if d['name'] == coint_to_filter]
-
-    # Obtiene el ID de la criptomoneda seleccionada
+    
+    # Getting the coin id 
     coin = bitcoint_dic[0]['id']
-
-    # Define los parámetros de entrada para la obtención de los datos de precios
-    vs_currency = "usd"
-    from_timestamp = 1641009600
-    to_timestamp = 1651377599
-    precision = 4
-
-    # Obtiene los datos de precios de CoinGecko
+ 
+    # Get the prices from the given timestamps
     market_data = cg_api.get_market_chart_data(coin, vs_currency, from_timestamp, to_timestamp, precision)
 
-    # Extrae la lista de precios y fechas de los datos obtenidos
+    # Select the prices from the dates
     data = market_data['prices']
 
-    # Convierte la lista de precios y fechas en un dataframe de pandas
+    # Formating to pandas
     df_from_api_data = pd.DataFrame(data, columns=['date', 'price'])
 
-    # Crea una instancia de la clase BitcoinDatabase
-    btc_db = BitcoinDatabase('btc_database.db', "btc_history4")
+    # Init the db
+    btc_db = BitcoinDatabase(db_name, table_btc_price_history)
 
-    # Obtiene los datos de precios de Bitcoin almacenados en la base de datos
-    btc_history_data = btc_db.select_data("btc_history4")
+    # Get the data currently in the db
+    btc_history_data = btc_db.select_data(table_btc_price_history)
 
-    # Obtiene la fecha más reciente en la que se registró un precio de Bitcoin en la base de datos
+    #  the most recent date into the db
     date_max = list(btc_history_data.reset_index()['date'].agg(['max']).fillna(''))[0]
 
-    # Agrega un índice al dataframe de precios de Bitcoin
+    # Reset the index
     btc_history_data = btc_history_data.reset_index()
 
-    # Filtra el dataframe de precios de CoinGecko para obtener solo los precios que aún no están en la base de datos
+    # Filter by the max date to obtain values that are not in the database
     filtered_df_to_load = df_from_api_data.loc[df_from_api_data['date'] > date_max]
 
-    # Inserta los nuevos precios de Bitcoin en la base de datos
+    # Insert the new values into the db
     if len(filtered_df_to_load):
         print(f"se insertan en db {len(filtered_df_to_load)} registros")
-        btc_db.insert_data(filtered_df_to_load, "btc_history4")
+        btc_db.insert_data(filtered_df_to_load,  table_btc_price_history)
 
-        # Obtiene los datos de precios de Bitcoin almacenados en la base de datos después de la actualización
-        btc_data_db = btc_db.select_data("btc_history4")
+        # Check the db with the update
+        btc_data_db = btc_db.select_data(table_btc_price_history)
         count = len(btc_data_db)
         max_date_in_db = date_max = list(btc_data_db.reset_index()['date'].agg(['max']).fillna(''))[0]
         print(f"hay un  total de {count} de registros y la fecha mas reciente es {max_date_in_db}")
 
-    # Si no hay nuevos precios de Bitcoin para insertar, imprime un mensaje indicando que la base de datos ya está actualizada
+    # If there are no new Bitcoin prices to insert, it prints a message indicating that the database is already up to date.
     else:
         print("already up tu date")
         count = len(btc_history_data)

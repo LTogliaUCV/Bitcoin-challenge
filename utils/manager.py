@@ -1,5 +1,8 @@
+import os
 import sqlite3
 import pandas as pd
+from dotenv import load_dotenv
+
 
 class BitcoinDatabase:
     def __init__(self, db_file,table_name):
