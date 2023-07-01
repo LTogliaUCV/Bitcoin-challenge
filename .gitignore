@@ -7,7 +7,6 @@
 # PyCache
 __pycache__
 
-#remove ipyn checkpoints
 .ipynb_checkpoints
-
+.hypothesis
 *.db
