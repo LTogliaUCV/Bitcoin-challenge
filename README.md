@@ -11,9 +11,9 @@ The scripts allows you to update Bitcoin prices in a SQLite3 database using the 
 ## Requisitos
 
 - Python 3.x
-- Instalar requirements.txt
-- Un url para el api de  `CoinGeckoAPI`
-
+- Install requirements.txt
+- URL from  `CoinGeckoAPI`
+- Create .env file using the env.example guide.
 ## Usage
 
 ```python
@@ -21,7 +21,8 @@ python load_data_btc.py
 python load_rolling_btc.py
 ```
 
-
+## Next Step
+- Create and pipeline using AWS Step functions or Airflow
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
