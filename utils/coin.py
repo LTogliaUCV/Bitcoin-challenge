@@ -30,7 +30,6 @@ class CoinGeckoAPI:
             return None
             
 
-   
     def get_coin_list(self):
         url = f"{base_url}/list"
         headers = {}
