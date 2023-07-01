@@ -8,7 +8,7 @@ days (moving average) of the price of bitcoin in the first quarter of 2022.
 
 The scripts allows you to update Bitcoin prices in a SQLite3 database using the CoinGecko API.
 
-## Requisitos
+## Requirements
 
 - Python 3.x
 - Install requirements.txt
