@@ -14,6 +14,7 @@ The scripts allows you to update Bitcoin prices in a SQLite3 database using the 
 - Install requirements.txt
 - URL from  `CoinGeckoAPI`
 - Create .env file using the env.example guide.
+- You can change the dates, windows size , db name , table name using the .env file
 ## Usage
 
 ```python
